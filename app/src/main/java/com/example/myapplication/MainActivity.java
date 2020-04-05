@@ -79,9 +79,9 @@ class DrawView extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        shotstext.setHeight(100);
-        shotstext.setWidth(screenWidth - 200);
-        shotstext.setTextSize(20);
+        p.setColor(Color.GRAY);
+        p.setTextSize(50);
+        canvas.drawText("Выстрелов сделано: " + shots,50,50,p);
         p.setColor(Color.GREEN);
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < 6; j++) {
@@ -160,6 +160,7 @@ class DrawView extends View {
                 shotstext.setText("Выстрелы: " + shots);
                 prevY = mainY;
                 prevX = mainX;
+                drawGrid();
                 active = true;
             }
         }
