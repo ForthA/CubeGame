@@ -21,9 +21,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public Area[][] area = new Area[15][15];
-    View view;
-    Bitmap bitmap;
-    ImageView imageView;
+    public boolean[][] areaBAN = new boolean[15][15];
     Canvas canvas;
     int randomi;
     int randomj;
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     int screenHeight = 0;
     double prevX = -1;
     double prevY = -1;
-    TextView shotstext;
 
 
     @Override
@@ -75,18 +72,22 @@ class DrawView extends View {
     public DrawView(Context context) {
         super(context);
         p = new Paint();
-        shotstext = new TextView(context);
     }
     @Override
     protected void onDraw(Canvas canvas) {
         p.setColor(Color.GRAY);
         p.setTextSize(50);
         canvas.drawText("Выстрелов сделано: " + shots,50,50,p);
-        p.setColor(Color.GREEN);
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < 6; j++) {
-
-                canvas.drawRect(area[i][j].getX(), area[i][j].getY() , area[i][j].getEndx() , area[i][j].getEndy(), p);
+                if (areaBAN[i][j] == false) {
+                    p.setColor(Color.GREEN);
+                    canvas.drawRect(area[i][j].getX(), area[i][j].getY(), area[i][j].getEndx(), area[i][j].getEndy(), p);
+                }
+                else {
+                    p.setColor(Color.RED);
+                    canvas.drawRect(area[i][j].getX(), area[i][j].getY(), area[i][j].getEndx(), area[i][j].getEndy(), p);
+                }
             }
         }
     }
@@ -101,6 +102,7 @@ class DrawView extends View {
 
             for (int i = 1; i < 10; i++) {
                 for (int j = 1; j < 6; j++) {
+                    areaBAN[i][j] = false;
                     area[i][j] = new Area(dx+ 5, dy + 5,periodX - 5,periodY - 5);
                     dx += periodX;
                 }
@@ -131,7 +133,6 @@ class DrawView extends View {
         Log.d("test", s2.toString());
         if (mainX >= area[randomi][randomj].getX() && mainX <= area[randomi][randomj].getEndx() && mainY <= area[randomi][randomj].getEndy() && mainY >= area[randomi][randomj].getY()) {
             shots += 1;
-            shotstext.setText("Выстрелы: " + shots);
             boom();
         } else {
             if (mainX == prevX && mainY == prevY) {
@@ -139,7 +140,8 @@ class DrawView extends View {
             } else {
                 for (int i = 1; i < 10; i++) {
                     for (int j = 1; j < 6; j++) {
-                        if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY()) {
+                        if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY() && areaBAN[i][j] == false) {
+                            shots += 1;
                             if (Math.abs(randomi - i) >= Math.abs(randomj - j)) {
                                 temp = Math.abs(randomi - i);
                                 toast = Toast.makeText(getApplicationContext(), "Неправильно. Правильный куб в радиусе: " + temp, Toast.LENGTH_SHORT);
@@ -149,6 +151,7 @@ class DrawView extends View {
                                 toast = Toast.makeText(getApplicationContext(), "Неправильно. Правильный куб в радиусе: " + temp, Toast.LENGTH_SHORT);
                                 toast.show();
                             }
+                            areaBAN[i][j] = true;
 
                         }
                     }
@@ -156,8 +159,6 @@ class DrawView extends View {
                 }
 
 
-                shots += 1;
-                shotstext.setText("Выстрелы: " + shots);
                 prevY = mainY;
                 prevX = mainX;
                 drawGrid();
@@ -180,6 +181,7 @@ class DrawView extends View {
     protected void onRestart() {
         super.onRestart();
         SetRandom();
+        initGame();
         active = true;
     }
 }
