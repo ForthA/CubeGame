@@ -85,9 +85,9 @@ class DrawView extends View {
 
         public void initGame() {
             float periodX = screenWidth / 5;
-            float periodY = screenHeight / 9;
+            float periodY = (screenHeight-200) / 9;
             float dx = 0;
-            float dy = 0;
+            float dy = 200;
 
             for (int i = 1; i < 10; i++) {
                 for (int j = 1; j < 6; j++) {
@@ -103,15 +103,6 @@ class DrawView extends View {
 
     public void drawGrid() {
         setContentView(new DrawView(this));
-        //bitmap = Bitmap.createBitmap(1800,1080,Bitmap.Config.ARGB_8888);
-        //canvas = new Canvas(bitmap);
-       // Paint p = new Paint();
-       // p.setColor(Color.GREEN);
-       // for (int i = 0; i < 5; i ++ ) {
-        //    for (int j = 0; j < 5; j ++) {
-           //     canvas.drawRect(area[i][j].getX(),area[i][j].getY(),area[i][j].getEndx(),area[i][j].getEndy(),p);
-          //  }
-       // }
     }
 
     @Override
@@ -129,6 +120,7 @@ class DrawView extends View {
         Log.d("test",s1.toString());
         Log.d("test",s2.toString());
         if (mainX >= area[randomi][randomj].getX() && mainX <= area[randomi][randomj].getEndx() && mainY <= area[randomi][randomj].getEndy() && mainY >= area[randomi][randomj].getY()){
+            shots +=1;
             boom();
         }
         else{
@@ -159,6 +151,8 @@ class DrawView extends View {
         Intent i = new Intent(this, WinActivity.class);
         startActivity(i);
         Log.d("test","boom");
+        Integer Shots = shots;
+        Log.d("test",Shots.toString());
 
     }
     @Override
