@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     int temp = 0;
     int screenWidth = 0;
     int screenHeight = 0;
+    double prevX = -1;
+    double prevY = -1;
+    TextView shotstext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +71,17 @@ class DrawView extends View {
 
     Paint p;
 
+
     public DrawView(Context context) {
         super(context);
         p = new Paint();
+        shotstext = new TextView(context);
     }
     @Override
     protected void onDraw(Canvas canvas) {
+        shotstext.setHeight(100);
+        shotstext.setWidth(screenWidth - 200);
+        shotstext.setTextSize(20);
         p.setColor(Color.GREEN);
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < 6; j++) {
@@ -114,48 +124,55 @@ class DrawView extends View {
         }
         return super.onTouchEvent(event);
     }
-    public void onHit(double mainX,double mainY){
+    public void onHit(double mainX,double mainY) {
         Double s1 = mainX;
         Double s2 = mainY;
-        Log.d("test",s1.toString());
-        Log.d("test",s2.toString());
-        if (mainX >= area[randomi][randomj].getX() && mainX <= area[randomi][randomj].getEndx() && mainY <= area[randomi][randomj].getEndy() && mainY >= area[randomi][randomj].getY()){
-            shots +=1;
+        Log.d("test", s1.toString());
+        Log.d("test", s2.toString());
+        if (mainX >= area[randomi][randomj].getX() && mainX <= area[randomi][randomj].getEndx() && mainY <= area[randomi][randomj].getEndy() && mainY >= area[randomi][randomj].getY()) {
+            shots += 1;
+            shotstext.setText("Выстрелы: " + shots);
             boom();
-        }
-        else{
-            for (int i = 1; i < 10; i++) {
-                for (int j = 1; j < 6; j++){
-                    if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY()){
-                        if (Math.abs(randomi - i) >= Math.abs(randomj - j)){
-                            temp = Math.abs(randomi - i);
-                            toast = Toast.makeText(getApplicationContext(),"Неправильно. Правильный куб в радиусе: " + temp,Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                        else {
-                            temp = Math.abs(randomj - j);
-                            toast = Toast.makeText(getApplicationContext(),"Неправильно. Правильный куб в радиусе: " + temp,Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
+        } else {
+            if (mainX == prevX && mainY == prevY) {
+                active = true;
+            } else {
+                for (int i = 1; i < 10; i++) {
+                    for (int j = 1; j < 6; j++) {
+                        if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY()) {
+                            if (Math.abs(randomi - i) >= Math.abs(randomj - j)) {
+                                temp = Math.abs(randomi - i);
+                                toast = Toast.makeText(getApplicationContext(), "Неправильно. Правильный куб в радиусе: " + temp, Toast.LENGTH_SHORT);
+                                toast.show();
+                            } else {
+                                temp = Math.abs(randomj - j);
+                                toast = Toast.makeText(getApplicationContext(), "Неправильно. Правильный куб в радиусе: " + temp, Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
 
+                        }
                     }
+
                 }
 
+
+                shots += 1;
+                shotstext.setText("Выстрелы: " + shots);
+                prevY = mainY;
+                prevX = mainX;
+                active = true;
             }
-
-
-            shots +=1;
-            active = true;
         }
+
     }
 
 
     public void boom(){
         Intent i = new Intent(this, WinActivity.class);
+        i.putExtra("shots",shots);
         startActivity(i);
+        shots = 0;
         Log.d("test","boom");
-        Integer Shots = shots;
-        Log.d("test",Shots.toString());
 
     }
     @Override

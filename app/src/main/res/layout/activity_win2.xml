@@ -13,20 +13,34 @@
         android:layout_marginTop="160dp"
         android:text="Победа!!"
         android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.031" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="204dp"
         android:layout_height="117dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginBottom="232dp"
+        android:layout_marginStart="100dp"
         android:text="Новая игра"
+        app:layout_constraintBottom_toTopOf="@+id/textViewShots"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.819" />
+
+    <TextView
+        android:id="@+id/textViewShots"
+        android:layout_width="188dp"
+        android:layout_height="52dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.448"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.703" />
 </androidx.constraintlayout.widget.ConstraintLayout>
