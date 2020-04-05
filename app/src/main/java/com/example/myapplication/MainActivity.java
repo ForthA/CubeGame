@@ -129,17 +129,20 @@ class DrawView extends View {
                     if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY()){
                         if (Math.abs(randomi - i) >= Math.abs(randomj - j)){
                             temp = Math.abs(randomi - i);
+                            toast = Toast.makeText(getApplicationContext(),"Неправильно. Правильный куб в радиусе: " + temp,Toast.LENGTH_SHORT);
+                            toast.show();
                         }
                         else {
                             temp = Math.abs(randomj - j);
+                            toast = Toast.makeText(getApplicationContext(),"Неправильно. Правильный куб в радиусе: " + temp,Toast.LENGTH_SHORT);
+                            toast.show();
                         }
 
                     }
                 }
 
             }
-            toast = Toast.makeText(getApplicationContext(),"Неправильно. Правильный куб в радиусе: " + temp,Toast.LENGTH_SHORT);
-            toast.show();
+
 
             shots +=1;
             active = true;
