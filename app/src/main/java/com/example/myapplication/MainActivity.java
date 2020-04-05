@@ -22,7 +22,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public Area[][] area = new Area[15][15];
     public boolean[][] areaBAN = new boolean[15][15];
-    Canvas canvas;
     int randomi;
     int randomj;
     boolean active = true;
@@ -33,42 +32,11 @@ public class MainActivity extends AppCompatActivity {
     int screenHeight = 0;
     double prevX = -1;
     double prevY = -1;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-        //setContentView(imageView);
-        getSupportActionBar().hide();
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        screenWidth = displaymetrics.widthPixels;
-        screenHeight = displaymetrics.heightPixels;
-        initGame();
-        SetRandom();
-        drawGrid();
-
-    }
-
-
-    public void SetRandom(){
-      randomi = 1 + (int) (Math.random() * 9);
-      randomj = 1 + (int) (Math.random() * 5);
-        Integer smth1 = randomi;
-        Integer smth2 = randomj;
-        String s1 = smth1.toString();
-        String s2 = smth2.toString();
-        Log.d("test", s1);
-        Log.d("test", s2);
- }
-
+/*
+        Класс для прорисовки
+*/
 class DrawView extends View {
-
     Paint p;
-
-
     public DrawView(Context context) {
         super(context);
         p = new Paint();
@@ -94,6 +62,46 @@ class DrawView extends View {
 }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        getScreenSize();
+        initGame();
+        SetRandom();
+        drawGrid();
+
+    }
+
+/*
+         Блок нахождения размеров экрана
+*/
+    public void getScreenSize(){
+        getSupportActionBar().hide();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        screenWidth = displaymetrics.widthPixels;
+        screenHeight = displaymetrics.heightPixels;
+    }
+/*
+        Блок назначения загаданного кубика
+*/
+
+    public void SetRandom(){
+      randomi = 1 + (int) (Math.random() * 9);
+      randomj = 1 + (int) (Math.random() * 5);
+        Integer smth1 = randomi;
+        Integer smth2 = randomj;
+        String s1 = smth1.toString();
+        String s2 = smth2.toString();
+        Log.d("test", s1);
+        Log.d("test", s2);
+ }
+
+/*
+       Блок разделения экрана на части
+*/
+
         public void initGame() {
             float periodX = screenWidth / 5;
             float periodY = (screenHeight-200) / 9;
@@ -115,12 +123,15 @@ class DrawView extends View {
             }
         }
 
-
-
+/*
+       Блок вызова прорисовки поля
+*/
     public void drawGrid() {
         setContentView(new DrawView(this));
     }
-
+/*
+    Обработка касания
+*/
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (active) {
@@ -129,6 +140,11 @@ class DrawView extends View {
         }
         return super.onTouchEvent(event);
     }
+/*
+     Блок проверки касания
+*/
+
+
     public void onHit(double mainX,double mainY) {
         Double s1 = mainX;
         Double s2 = mainY;
@@ -178,8 +194,9 @@ class DrawView extends View {
         }
 
     }
-
-
+/*
+       Блок при победе
+*/
     public void boom(){
         Intent i = new Intent(this, WinActivity.class);
         i.putExtra("shots",shots);
@@ -188,6 +205,9 @@ class DrawView extends View {
         Log.d("test","boom");
 
     }
+/*
+       Блок для действий после выхода из активности
+*/
     @Override
     protected void onRestart() {
         super.onRestart();
