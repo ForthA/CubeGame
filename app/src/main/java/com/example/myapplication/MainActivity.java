@@ -76,7 +76,7 @@ class DrawView extends View {
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < 6; j++) {
 
-                canvas.drawRect(area[i][j].getX() + 5, area[i][j].getY() + 5, area[i][j].getEndx() - 5, area[i][j].getEndy()- 5, p);
+                canvas.drawRect(area[i][j].getX(), area[i][j].getY() , area[i][j].getEndx() , area[i][j].getEndy(), p);
             }
         }
     }
@@ -91,7 +91,7 @@ class DrawView extends View {
 
             for (int i = 1; i < 10; i++) {
                 for (int j = 1; j < 6; j++) {
-                    area[i][j] = new Area(dx, dy,periodX,periodY);
+                    area[i][j] = new Area(dx+ 5, dy + 5,periodX - 5,periodY - 5);
                     dx += periodX;
                 }
                 dx = 0;
