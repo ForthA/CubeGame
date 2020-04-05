@@ -97,6 +97,10 @@ class DrawView extends View {
         public void initGame() {
             float periodX = screenWidth / 5;
             float periodY = (screenHeight-200) / 9;
+            Float s1 = periodX;
+            Float s2 = periodY;
+            Log.d("res",s1.toString());
+            Log.d("res",s2.toString());
             float dx = 0;
             float dy = 200;
 
@@ -120,9 +124,8 @@ class DrawView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (active) {
-            Log.d("test", "touched");
             active = false;
-            onHit(event.getX(), event.getY());
+            onHit(event.getX(), event.getY()-40);
         }
         return super.onTouchEvent(event);
     }
@@ -141,6 +144,14 @@ class DrawView extends View {
                 for (int i = 1; i < 10; i++) {
                     for (int j = 1; j < 6; j++) {
                         if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY() && areaBAN[i][j] == false) {
+                            Float s3 = area[i][j].getX();
+                            Float s4 = area[i][j].getY();
+                            Float s5 = area[i][j].getEndx();
+                            Float s6 = area[i][j].getEndy();
+                            Log.d("test",s3.toString());
+                            Log.d("test",s4.toString());
+                            Log.d("test",s5.toString());
+                            Log.d("test",s6.toString());
                             shots += 1;
                             if (Math.abs(randomi - i) >= Math.abs(randomj - j)) {
                                 temp = Math.abs(randomi - i);
