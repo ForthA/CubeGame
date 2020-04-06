@@ -86,7 +86,6 @@ class DrawView extends View {
                     if (i == 3 && j == 3) canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX,area[i][j].getEndy() - (periodY / 2),paint);
                     if (i == 4 && j == 5) canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX,area[i][j].getEndy() - periodY,paint);
                     if (i == 4 && j == 1) canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX,area[i][j].getEndy() - (periodY / 2),paint);
-                    if (i == 5 && j == 4)  canvas.drawBitmap(bluefish,area[i][j].getEndx() - periodX,area[i][j].getEndy() - periodY,paint);
                 }
             }
         }
