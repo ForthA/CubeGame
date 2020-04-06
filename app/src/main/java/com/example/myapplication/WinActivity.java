@@ -15,6 +15,7 @@ public class WinActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_win2);
         button = findViewById(R.id.button);
         textViewShots = findViewById(R.id.textViewShots);

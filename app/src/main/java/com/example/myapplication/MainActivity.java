@@ -15,6 +15,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     public Area[][] area = new Area[15][15];
     public boolean[][] areaBAN = new boolean[15][15];
+    public int[][] radius = new int[15][15];
     int randomi;
     int randomj;
     boolean active = true;
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     int screenHeight = 0;
     double prevX = -1;
     double prevY = -1;
+    float periodX = 0;
+    float periodY = 0;
+    Integer digit = 0;
 /*
         Класс для прорисовки
 */
@@ -43,7 +49,10 @@ class DrawView extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        p.setColor(Color.GRAY);
+
+        p.setColor(Color.BLUE);
+        canvas.drawRect(0,0,screenWidth,screenHeight,p);
+        p.setColor(Color.WHITE);
         p.setTextSize(50);
         canvas.drawText("Выстрелов сделано: " + shots,50,50,p);
         for (int i = 1; i < 10; i++) {
@@ -53,8 +62,11 @@ class DrawView extends View {
                     canvas.drawRect(area[i][j].getX(), area[i][j].getY(), area[i][j].getEndx(), area[i][j].getEndy(), p);
                 }
                 else {
-                    p.setColor(Color.RED);
+                    digit = radius[i][j];
+                    p.setColor(Color.BLUE);
                     canvas.drawRect(area[i][j].getX(), area[i][j].getY(), area[i][j].getEndx(), area[i][j].getEndy(), p);
+                    p.setColor(Color.WHITE);
+                    canvas.drawText(digit.toString(),area[i][j].getX() + (periodX / 2),area[i][j].getY() + (periodY / 2),p);
                 }
             }
         }
@@ -66,9 +78,12 @@ class DrawView extends View {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getScreenSize();
-        initGame();
         SetRandom();
+        initGame();
         drawGrid();
 
     }
@@ -103,8 +118,8 @@ class DrawView extends View {
 */
 
         public void initGame() {
-            float periodX = screenWidth / 5;
-            float periodY = (screenHeight-200) / 9;
+            periodX = screenWidth / 5;
+            periodY = (screenHeight-200) / 9;
             Float s1 = periodX;
             Float s2 = periodY;
             Log.d("res",s1.toString());
@@ -114,8 +129,14 @@ class DrawView extends View {
 
             for (int i = 1; i < 10; i++) {
                 for (int j = 1; j < 6; j++) {
+                    if (Math.abs(randomi - i) >= Math.abs(randomj - j)) {
+                        temp = Math.abs(randomi - i);
+                    } else {
+                        temp = Math.abs(randomj - j);
+                    }
                     areaBAN[i][j] = false;
                     area[i][j] = new Area(dx+ 5, dy + 5,periodX - 5,periodY - 5);
+                    radius[i][j] = temp;
                     dx += periodX;
                 }
                 dx = 0;
@@ -136,7 +157,7 @@ class DrawView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (active) {
             active = false;
-            onHit(event.getX(), event.getY()-40);
+            onHit(event.getX(), event.getY());
         }
         return super.onTouchEvent(event);
     }
@@ -160,24 +181,7 @@ class DrawView extends View {
                 for (int i = 1; i < 10; i++) {
                     for (int j = 1; j < 6; j++) {
                         if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY() && areaBAN[i][j] == false) {
-                            Float s3 = area[i][j].getX();
-                            Float s4 = area[i][j].getY();
-                            Float s5 = area[i][j].getEndx();
-                            Float s6 = area[i][j].getEndy();
-                            Log.d("test",s3.toString());
-                            Log.d("test",s4.toString());
-                            Log.d("test",s5.toString());
-                            Log.d("test",s6.toString());
                             shots += 1;
-                            if (Math.abs(randomi - i) >= Math.abs(randomj - j)) {
-                                temp = Math.abs(randomi - i);
-                                toast = Toast.makeText(getApplicationContext(), "Неправильно. Правильный куб в радиусе: " + temp, Toast.LENGTH_SHORT);
-                                toast.show();
-                            } else {
-                                temp = Math.abs(randomj - j);
-                                toast = Toast.makeText(getApplicationContext(), "Неправильно. Правильный куб в радиусе: " + temp, Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
                             areaBAN[i][j] = true;
 
                         }
