@@ -9,19 +9,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.media.Image;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Size;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public Area[][] area = new Area[15][15];
@@ -42,78 +38,122 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bubbles;
     Bitmap qwe;
     Bitmap ewq;
+    Bitmap zxc;
+    Bitmap cxz;
     Bitmap bluefish;
+    Bitmap redfish;
+    Bitmap saimon;
+    Bitmap req;
+    Bitmap explosion;
+    SoundPool sp;
+    int pluhSound = 0;
 /*
         Класс для прорисовки
 */
 class DrawView extends View {
     Paint p;
     Paint paint;
+
     public DrawView(Context context) {
         super(context);
         p = new Paint();
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
-
         p.setColor(Color.BLUE);
-        canvas.drawRect(0,0,screenWidth,screenHeight,p);
+        canvas.drawRect(0, 0, screenWidth, screenHeight, p);
         p.setColor(Color.WHITE);
         p.setTextSize(50);
-       // Integer s1  = Math.round(periodX) / 4;
-       // Integer s2 = Math.round(periodY) / 4;
-     //   Log.d("test",s1.toString());
-       // Log.d("test",s2.toString());
-        bubbles = Bitmap.createScaledBitmap(qwe, Math.round(periodX) / 2, Math.round(periodY) / 2, true);
-        bluefish = Bitmap.createScaledBitmap(ewq, Math.round(periodX) / 2, Math.round(periodY) / 2, true);
-        canvas.drawBitmap(bubbles,800,50,paint);
-        canvas.drawText("Выстрелов сделано: " + shots,50,50,p);
+        canvas.drawBitmap(bubbles, 800, 50, paint);
+        canvas.drawText("Выстрелов сделано: " + shots, 50, 50, p);
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < 6; j++) {
                 if (areaBAN[i][j] == false) {
                     p.setColor(Color.GREEN);
                     canvas.drawRect(area[i][j].getX(), area[i][j].getY(), area[i][j].getEndx(), area[i][j].getEndy(), p);
-                }
-                else {
+                } else {
                     digit = radius[i][j];
                     p.setColor(Color.BLUE);
                     canvas.drawRect(area[i][j].getX(), area[i][j].getY(), area[i][j].getEndx(), area[i][j].getEndy(), p);
                     p.setColor(Color.WHITE);
-                    canvas.drawText(digit.toString(),area[i][j].getX() + (periodX / 2),area[i][j].getY() + (periodY / 2),p);
-                    if (i == 1 && j == 2)  canvas.drawBitmap(bubbles,area[i][j].getEndx() - periodX,area[i][j].getEndy() - periodY,paint);
-                    if (i == 2 && j == 4) canvas.drawBitmap(bubbles, area[i][j].getEndx() - (periodX / 2),area[i][j].getEndy() - (periodY / 2),paint);
-                    if (i == 3 && j == 3) canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX,area[i][j].getEndy() - (periodY / 2),paint);
-                    if (i == 4 && j == 5) canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX,area[i][j].getEndy() - periodY,paint);
-                    if (i == 4 && j == 1) canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX,area[i][j].getEndy() - (periodY / 2),paint);
+                    canvas.drawText(digit.toString(), area[i][j].getX() + (periodX / 2), area[i][j].getY() + (periodY / 2), p);
+                    if (i == 1 && j == 2)
+                        canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX, area[i][j].getEndy() - periodY, paint);
+                    if (i == 2 && j == 4)
+                        canvas.drawBitmap(bubbles, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 3 && j == 3)
+                        canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX, area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 4 && j == 5)
+                        canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX, area[i][j].getEndy() - periodY, paint);
+                    if (i == 4 && j == 1)
+                        canvas.drawBitmap(bubbles, area[i][j].getEndx() - periodX, area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 5 && j == 4)
+                        canvas.drawBitmap(bluefish, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 4 && j == 2)
+                        canvas.drawBitmap(redfish, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - periodY, paint);
+                    if (i == 6 && j == 1)
+                        canvas.drawBitmap(redfish, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - periodY, paint);
+                    if (i == 6 && j == 3)
+                        canvas.drawBitmap(saimon, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 7 && j == 5)
+                        canvas.drawBitmap(redfish, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 7 && j == 1)
+                        canvas.drawBitmap(bluefish, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 8 && j == 4)
+                        canvas.drawBitmap(saimon, area[i][j].getEndx() - periodX, area[i][j].getEndy() - (periodY / 2), paint);
+                    if (i == 9 && j == 2)
+                        canvas.drawBitmap(redfish, area[i][j].getEndx() - (periodX / 2), area[i][j].getEndy() - (periodY / 2), paint);
                 }
+
             }
         }
+
+        }
     }
-}
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        qwe = BitmapFactory.decodeResource(getResources(),R.drawable.bubbles);
-        ewq = BitmapFactory.decodeResource(getResources(),R.drawable.bluefish);
         getScreenSize();
         SetRandom();
         initGame();
+        setConstaints();
         drawGrid();
 
     }
+/*
+        Блок обозначений разных переменных
+*/
+   public void setConstaints(){
+       sp = new SoundPool(1, AudioManager.STREAM_MUSIC,1);
+       pluhSound = sp.load(this,R.raw.pluh,1);
+       qwe = BitmapFactory.decodeResource(getResources(),R.drawable.bubbles);
+       ewq = BitmapFactory.decodeResource(getResources(),R.drawable.bluefish);
+       zxc = BitmapFactory.decodeResource(getResources(),R.drawable.redfish);
+       cxz = BitmapFactory.decodeResource(getResources(),R.drawable.saimon);
+       req = BitmapFactory.decodeResource(getResources(),R.drawable.explosion);
+       requestWindowFeature(Window.FEATURE_NO_TITLE);
+       getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+       WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       getSupportActionBar().hide();
+       bubbles = Bitmap.createScaledBitmap(qwe, Math.round(periodX) / 2, Math.round(periodY) / 2, true);
+       bluefish = Bitmap.createScaledBitmap(ewq, Math.round(periodX) / 2 + 25, Math.round(periodY) / 2 + 25, true);
+       redfish = Bitmap.createScaledBitmap(zxc, Math.round(periodX) / 2 + 20, Math.round(periodY) / 2 + 20, true);
+       saimon = Bitmap.createScaledBitmap(cxz, Math.round(periodX) / 2 + 20, Math.round(periodY) / 2 + 20, true);
+       explosion = Bitmap.createScaledBitmap(req, Math.round(periodX) * 4, Math.round(periodY) * 4, true);
 
+   }
 /*
          Блок нахождения размеров экрана
 */
     public void getScreenSize(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         screenWidth = displaymetrics.widthPixels;
@@ -202,6 +242,7 @@ class DrawView extends View {
                 for (int i = 1; i < 10; i++) {
                     for (int j = 1; j < 6; j++) {
                         if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY() && areaBAN[i][j] == false) {
+                            sp.play(pluhSound,1,1,0,0,1);
                             shots += 1;
                             areaBAN[i][j] = true;
 
