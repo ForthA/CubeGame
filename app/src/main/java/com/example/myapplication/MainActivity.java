@@ -43,10 +43,8 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bluefish;
     Bitmap redfish;
     Bitmap saimon;
-    Bitmap req;
-    Bitmap explosion;
-    SoundPool sp;
-    int pluhSound = 0;
+    // SoundPool sp;
+    // int pluhSound = 0;
     /*
             Класс для прорисовки
     */
@@ -132,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
             Блок обозначений разных переменных
     */
     public void setConstaints(){
-        sp = new SoundPool(1, AudioManager.STREAM_MUSIC,1);
-        pluhSound = sp.load(this,R.raw.pluh,1);
+       // sp = new SoundPool(1, AudioManager.STREAM_MUSIC,1);
+        //pluhSound = sp.load(this,R.raw.pluh,1);
         qwe = BitmapFactory.decodeResource(getResources(),R.drawable.bubbles);
         ewq = BitmapFactory.decodeResource(getResources(),R.drawable.bluefish);
         zxc = BitmapFactory.decodeResource(getResources(),R.drawable.redfish);
@@ -240,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 1; i < 10; i++) {
                     for (int j = 1; j < 6; j++) {
                         if (mainX >= area[i][j].getX() && mainX <= area[i][j].getEndx() && mainY <= area[i][j].getEndy() && mainY >= area[i][j].getY() && areaBAN[i][j] == false) {
-                            sp.play(pluhSound,1,1,0,0,1);
+                            //sp.play(pluhSound,1,1,0,0,1);
                             shots += 1;
                             areaBAN[i][j] = true;
 
